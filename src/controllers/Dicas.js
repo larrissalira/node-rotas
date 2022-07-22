@@ -1,25 +1,20 @@
-import DicasModel from "../models/DicasModel.js";
-import ValidacoesService from "../services/ValidacoesService.js";
+import DicasModels from "../models/DicasModels";
 import DatabaseMetodos from "../utils/DatabaseMetodos.js";
 
-class Dicas{
-    static rotas(app){
-        app.get("/dicas", (req, res) => {
-            const response = DatabaseMetodos.escolheDica()
+class Dicas {
+    static rotas(app) {
+
+        app.get("/tips", (req, res) => {
+            const response = DatabaseMetodos.retornarDicas()
             res.status(200).json(response)
         })
-        
-        app.post("/dicas",(req, res) => {  
-            const validar = ValidacoesService.validarDicas(req.body.dica)
-            
-            if(validar){
-                const dicas = new DicasModel(...Object.values(req.body)) 
-                const response = DatabaseMetodos.inserirDicas(dicas)
-                res.status(201).json(response)
-            }else{
-                res.status(400).send(`Erro: ${req.body.dica}a dica está certa?`);
-            }
+
+        app.post("/create", (req, res) => {
+            const dicas = new DicaModel(...Object.values(req.body))
+            const response = DatabaseMetodos.selecioneDica(dicas)
+            res.status(201).json(response)
         })
+
     }
 }
 
